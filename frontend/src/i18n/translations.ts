@@ -28,10 +28,12 @@ export const translations = {
     demoAccounts: 'حسابات تجريبية سريعة',
     demoPatient: 'مريض: أحمد حسن',
     demoDoctor: 'طبيب معتمد: د. محمد طارق',
-    demoNurse: 'الممرضة: شهد السيد هاشم',
+    demoNurse: 'د. سمر السيد محمد هاشم (صيدلية إكلينيكية)',
+    demoDoctorShahd: 'د. سمر السيد محمد هاشم (صيدلية إكلينيكية)',
+    demoSamar: 'د. سمر السيد محمد هاشم (صيدلية إكلينيكية)',
     demoPharmVerified: 'صيدلي مرخص: د. مريم فاروق',
     demoPharmPending: 'صيدلي قيد المراجعة: د. كريم زكي',
-    nurseShahdTitle: 'الممرضة الذكية: شهد السيد هاشم',
+    nurseShahdTitle: 'د. سمر السيد محمد هاشم',
     
     // Safety & Philosophy
     criticalDisclaimerTitle: 'إخلاء مسؤولية طبي هام',
@@ -133,10 +135,12 @@ export const translations = {
     demoAccounts: 'Quick Demo Accounts',
     demoPatient: 'Patient: Ahmed Hassan',
     demoDoctor: 'Doctor: Dr. Mohamed Tarek',
-    demoNurse: 'Nurse: Shahd El-Sayed Hashem',
+    demoNurse: 'Clinical Pharmacist: Dr. Samar Alsayed Mohamed Hashem',
+    demoDoctorShahd: 'Clinical Pharmacist: Dr. Samar Alsayed Mohamed Hashem',
+    demoSamar: 'Clinical Pharmacist: Dr. Samar Alsayed Mohamed Hashem',
     demoPharmVerified: 'Verified Pharmacist: Dr. Mariam Farouk',
     demoPharmPending: 'Pending Pharmacist: Dr. Karim Zaki',
-    nurseShahdTitle: 'Smart Clinical Nurse: Shahd El-Sayed Hashem',
+    nurseShahdTitle: 'Dr. Samar Alsayed Mohamed Hashem (Clinical Pharmacist)',
     
     // Safety & Philosophy
     criticalDisclaimerTitle: 'Critical Medical Disclaimer',

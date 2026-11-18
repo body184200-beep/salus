@@ -63,13 +63,20 @@ test('SALUS Comprehensive Test Suite', async (t) => {
     `).get('pending.pharmacist@salus.eg') as any;
     assert.equal(pendingPharm.verification_status, 'pending', 'Dr. Karim Zaki must be pending');
 
-    // Demo Nurse Shahd El-Sayed Hashem check
-    const nurse = db.prepare('SELECT * FROM users WHERE email = ?').get('nurse@salus.eg') as any;
-    assert.ok(nurse, 'Demo Nurse Shahd must exist');
-    assert.equal(nurse.role, 'nurse');
-    assert.ok(nurse.display_name.includes('شهد السيد هاشم'), 'Nurse name must be Shahd El-Sayed Hashem');
+    // Demo Clinical Pharmacist Dr. Samar Alsayed Mohamed Hashem check
+    const samar = db.prepare('SELECT * FROM users WHERE email = ?').get('samar@salus.eg') as any;
+    assert.ok(samar, 'Demo Clinical Pharmacist Samar must exist');
+    assert.equal(samar.role, 'pharmacist');
+    assert.ok(samar.display_name.includes('سمر السيد محمد هاشم'), 'Name must be Samar Alsayed Mohamed Hashem');
+    assert.ok(samar.display_name.includes('د.'), 'Title must be Dr.');
 
-    // Demo Doctor check
+    // Profile check
+    const samarProfile = db.prepare('SELECT * FROM pharmacist_profiles WHERE user_id = ?').get(samar.id) as any;
+    assert.ok(samarProfile, 'Samar profile must exist');
+    assert.equal(samarProfile.verification_status, 'verified');
+    assert.ok(samarProfile.full_name.includes('النقابة العامة لصيادلة مصر'));
+
+    // Demo Doctor Mohamed Tarek check
     const doctor = db.prepare('SELECT * FROM users WHERE email = ?').get('doctor@salus.eg') as any;
     assert.ok(doctor, 'Demo Doctor must exist');
     assert.equal(doctor.role, 'doctor');

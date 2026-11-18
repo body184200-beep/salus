@@ -195,10 +195,10 @@ class LandingScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 _buildStepCard(
                   step: '1',
-                  title: isAr ? 'اسأل الممرضة شهد أو امسح العبوة' : 'Ask Nurse Shahd or Scan Package',
+                  title: isAr ? 'اسأل د. سمر أو امسح العبوة' : 'Ask Dr. Samar or Scan Package',
                   desc: isAr
-                      ? 'استشر الممرضة شهد السيد هاشم بالصوت أو امسح العبوة وتأكد من الجرعة والتركيز.'
-                      : 'Consult Nurse Shahd El-Sayed Hashem by voice or use camera OCR with patient confirmation.',
+                      ? 'استشر د. سمر السيد محمد هاشم بالصوت أو امسح العبوة وتأكد من الجرعة والتركيز.'
+                      : 'Consult Dr. Samar Alsayed Mohamed Hashem by voice or use camera OCR with patient confirmation.',
                   icon: Icons.support_agent_rounded,
                   color: SalusTheme.primaryTeal,
                 ),

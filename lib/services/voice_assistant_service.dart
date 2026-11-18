@@ -36,14 +36,14 @@ class VoiceAssistantService {
       );
     }
 
-    // Nurse identity response
-    if (lower.contains('مين انت') || lower.contains('اسمك') || lower.contains('الممرضة') || lower.contains('شهد') || lower.contains('nurse')) {
+    // Dr. Samar identity response
+    if (lower.contains('مين انت') || lower.contains('اسمك') || lower.contains('سمر') || lower.contains('samar') || lower.contains('الدكتورة') || lower.contains('دكتورة') || lower.contains('صيدلي') || lower.contains('pharmacist') || lower.contains('doctor') || lower.contains('شهد')) {
       return VoiceAssistantResponse(
-        answerAr: 'أنا الممرضة شهد السيد هاشم، المساعد التمريضي الإكلينيكي في منصة سالوس. أساعدك في فهم أدويتك وشرح الآثار الجانبية بناءً على الأدلة الطبية وتسهيل التواصل مع طبيبك أو صيدليك.',
-        answerEn: 'I am Nurse Shahd El-Sayed Hashem, your clinical nurse assistant on SALUS. I help you understand your medications and adverse effects based on clinical trials, and connect with your doctor or pharmacist.',
+        answerAr: 'أنا د. سمر السيد محمد هاشم، طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر في منصة سالوس. أساعدك في فهم أدويتك وشرح الآثار الجانبية بناءً على الأدلة الطبية وتسهيل التواصل لضمان أمانك الدوائي.',
+        answerEn: 'I am Dr. Samar Alsayed Mohamed Hashem, Clinical Pharmacist verified by the General Syndicate of Egyptian Pharmacists on SALUS. I help you understand your medications and adverse effects based on clinical trials, and ensure medication safety.',
         clarifyingQuestionsAr: ['هل تود الاستفسار عن أحد أدويتك أو عرض تشعر به؟'],
         clarifyingQuestionsEn: ['Do you have questions about your prescribed medications or symptoms?'],
-        sourceTitle: 'SALUS Clinical Nursing Support Protocol',
+        sourceTitle: 'SALUS Clinical Pharmacy Support Protocol',
       );
     }
 

@@ -124,7 +124,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
             className="p-2.5 bg-white rounded-xl border border-emerald-300 hover:border-emerald-600 text-start transition-all"
           >
             <div className="text-xs font-bold text-emerald-800">{t('demoNurse')}</div>
-            <div className="text-[10px] text-emerald-600">تمريض ورعاية إكلينيكية</div>
+            <div className="text-[10px] text-emerald-600">طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر</div>
           </button>
           <button
             onClick={async () => {

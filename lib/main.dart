@@ -306,12 +306,12 @@ class _SalusMainScreenState extends State<SalusMainScreen> {
                 ),
               ),
               PopupMenuItem(
-                value: AppState.demoNurse,
+                value: AppState.demoClinicalPharmacistSamar,
                 child: ListTile(
                   dense: true,
-                  leading: const Icon(Icons.support_agent_rounded, color: Color(0xFF10B981)),
-                  title: const Text('الممرضة: شهد السيد هاشم', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                  subtitle: Text(isAr ? 'تمريض إكلينيكي ورعاية المرضى' : 'Clinical Nurse & Patient Support', style: const TextStyle(fontSize: 10, color: Color(0xFF10B981))),
+                  leading: const Icon(Icons.health_and_safety_rounded, color: Color(0xFF10B981)),
+                  title: const Text('د. سمر السيد محمد هاشم', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  subtitle: Text(isAr ? 'طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر' : 'Clinical Pharmacist - Syndicate Verified', style: const TextStyle(fontSize: 10, color: Color(0xFF10B981))),
                 ),
               ),
               PopupMenuItem(
@@ -370,22 +370,50 @@ class _SalusMainScreenState extends State<SalusMainScreen> {
         ],
       ),
 
-      // Floating Egyptian Voice Assistant Button: Nurse Shahd El-Sayed Hashem
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: SalusTheme.primaryTeal,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (_) => VoiceAssistantSheet(isAr: isAr),
-          );
-        },
-        icon: const Icon(Icons.support_agent_rounded),
-        label: Text(
-          isAr ? 'الممرضة: شهد السيد هاشم' : 'Nurse Shahd Assistant',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+      // Floating Egyptian Voice Assistant Button: Dr. Samar Alsayed Mohamed Hashem
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: SalusTheme.tealGlow,
+        ),
+        child: FloatingActionButton.extended(
+          elevation: 0,
+          backgroundColor: SalusTheme.primaryTeal,
+          foregroundColor: Colors.white,
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) => VoiceAssistantSheet(isAr: isAr),
+            );
+          },
+          icon: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: Colors.white24,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.mic_rounded, size: 20),
+          ),
+          label: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                isAr ? 'د. سمر السيد محمد هاشم' : 'Dr. Samar Assistant',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text('AI', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900)),
+              ),
+            ],
+          ),
         ),
       ),
 

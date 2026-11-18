@@ -24,9 +24,10 @@ import { useAuth } from '../context/AuthContext.js';
 
 interface LandingPageProps {
   onNavigate: (view: string) => void;
+  onOpenAssistant?: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onOpenAssistant }) => {
   const { t, language, isRtl } = useLanguage();
   const {
     isAuthenticated,
@@ -115,6 +116,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 : 'Patient-owned health records. Consent-based sharing with instant revocation.'}
             </span>
           </div>
+
+          {/* Trust Metrics Pill Strip */}
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div className="glass-panel p-4 rounded-2xl text-center shadow-sm hover:border-salus-teal/40 transition-all card-hover-lift">
+              <div className="text-2xl font-black text-salus-teal">3</div>
+              <div className="text-xs font-bold text-salus-dark-teal mt-0.5">
+                {language === 'ar' ? 'فئات علاجية أساسية' : 'Core Drug Categories'}
+              </div>
+              <div className="text-[10px] text-salus-muted mt-0.5">
+                {language === 'ar' ? 'ضغط • سكر • مسكنات' : 'Hypertension • Diabetes • Pain'}
+              </div>
+            </div>
+
+            <div className="glass-panel p-4 rounded-2xl text-center shadow-sm hover:border-salus-teal/40 transition-all card-hover-lift">
+              <div className="text-2xl font-black text-emerald-600">9</div>
+              <div className="text-xs font-bold text-salus-dark-teal mt-0.5">
+                {language === 'ar' ? 'مواد فعالة مسجلة' : 'Active Ingredients'}
+              </div>
+              <div className="text-[10px] text-salus-muted mt-0.5">
+                {language === 'ar' ? 'هيئة الدواء المصرية' : 'Egyptian Drug Authority'}
+              </div>
+            </div>
+
+            <div className="glass-panel p-4 rounded-2xl text-center shadow-sm hover:border-salus-teal/40 transition-all card-hover-lift">
+              <div className="text-2xl font-black text-salus-teal">100%</div>
+              <div className="text-xs font-bold text-salus-dark-teal mt-0.5">
+                {language === 'ar' ? 'أدلة سريرية موثقة' : 'Verified Clinical Evidence'}
+              </div>
+              <div className="text-[10px] text-salus-muted mt-0.5">
+                {language === 'ar' ? 'تجارب ونشرات رسمية' : 'Trials & Official Inserts'}
+              </div>
+            </div>
+
+            <div className="glass-panel p-4 rounded-2xl text-center shadow-sm hover:border-salus-teal/40 transition-all card-hover-lift">
+              <div className="text-2xl font-black text-salus-teal">0%</div>
+              <div className="text-xs font-bold text-salus-dark-teal mt-0.5">
+                {language === 'ar' ? 'أرقام غير مؤكدة' : 'Zero Hallucinations'}
+              </div>
+              <div className="text-[10px] text-salus-muted mt-0.5">
+                {language === 'ar' ? 'شفافية وأمان تام' : 'Strict Evidence Guardrails'}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -133,17 +177,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Step 1 */}
-          <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative">
-            <div className="w-14 h-14 rounded-2xl bg-salus-light-mint flex items-center justify-center text-salus-teal font-black text-xl mb-6">
-              1
+          <div 
+            onClick={onOpenAssistant}
+            className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all relative card-hover-lift cursor-pointer group hover:border-salus-teal/30"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="w-14 h-14 rounded-2xl bg-salus-light-mint flex items-center justify-center text-salus-teal font-black text-xl group-hover:scale-110 transition-transform">
+                1
+              </div>
+              <span className="text-[11px] font-bold text-salus-teal bg-salus-light-mint px-2.5 py-1 rounded-full flex items-center gap-1 group-hover:bg-salus-teal group-hover:text-white transition-colors">
+                <Mic className="w-3.5 h-3.5" />
+                <span>{language === 'ar' ? 'تحدث مع د. سمر' : 'Talk to Dr. Samar'}</span>
+              </span>
             </div>
-            <h3 className="text-xl font-bold text-salus-dark-teal mb-3">
-              {language === 'ar' ? 'اسأل الممرضة شهد أو صوّر العبوة' : 'Ask Nurse Shahd or Scan Package'}
+            <h3 className="text-xl font-bold text-salus-dark-teal mb-3 group-hover:text-salus-teal transition-colors">
+              {language === 'ar' ? 'اسأل د. سمر أو صوّر العبوة' : 'Ask Dr. Samar or Scan Package'}
             </h3>
             <p className="text-salus-muted text-sm leading-relaxed">
               {language === 'ar'
-                ? 'استشر الممرضة شهد السيد هاشم بالصوت أو استخدم الكاميرا لمسح العبوة والتحقق الفوري من الجرعة والتركيز.'
-                : 'Consult Nurse Shahd El-Sayed Hashem by voice or use your camera to scan packaging with verified matching.'}
+                ? 'استشر د. سمر السيد محمد هاشم بالصوت أو استخدم الكاميرا لمسح العبوة والتحقق الفوري من الجرعة والتركيز.'
+                : 'Consult Dr. Samar Alsayed Mohamed Hashem by voice or use your camera to scan packaging with verified matching.'}
             </p>
           </div>
 
@@ -379,7 +432,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 }}
                 className="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-xl transition-all"
               >
-                {language === 'ar' ? 'الممرضة: شهد السيد هاشم' : 'Nurse: Shahd El-Sayed Hashem'}
+                {language === 'ar' ? 'د. سمر السيد محمد هاشم (صيدلية إكلينيكية)' : 'Dr. Samar Alsayed Mohamed Hashem (Clinical Pharmacist)'}
               </button>
               <button
                 onClick={() => {

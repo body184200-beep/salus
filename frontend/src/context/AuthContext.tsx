@@ -23,7 +23,9 @@ interface AuthContextType {
   loginAsDemoPharmacist: () => Promise<void>;
   loginAsDemoPendingPharmacist: () => Promise<void>;
   loginAsDemoDoctor: () => Promise<void>;
+  loginAsDemoDoctorShahd: () => Promise<void>;
   loginAsDemoNurse: () => Promise<void>;
+  loginAsDemoSamar: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -84,8 +86,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await loginWithCredentials('doctor@salus.eg');
   };
 
+  const loginAsDemoSamar = async () => {
+    await loginWithCredentials('samar@salus.eg');
+  };
+
+  const loginAsDemoDoctorShahd = async () => {
+    await loginWithCredentials('samar@salus.eg');
+  };
+
   const loginAsDemoNurse = async () => {
-    await loginWithCredentials('nurse@salus.eg');
+    await loginWithCredentials('samar@salus.eg');
   };
 
   const loginAsDemoPharmacist = async () => {
@@ -116,6 +126,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         loginAsDemoPatient,
         loginAsDemoDoctor,
+        loginAsDemoSamar,
+        loginAsDemoDoctorShahd,
         loginAsDemoNurse,
         loginAsDemoPharmacist,
         loginAsDemoPendingPharmacist,

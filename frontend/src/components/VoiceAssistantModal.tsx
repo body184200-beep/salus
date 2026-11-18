@@ -27,8 +27,8 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({ isOpen
       sender: 'assistant',
       text:
         language === 'ar'
-          ? 'أهلاً بك، أنا الممرضة شهد السيد هاشم في منصة سالوس. تقدر تسألني بصوتك أو كتابة عن أي دواء من الأدوية الموثقة أو أي أثر جانبي حاسس بيه لمساعدتك في أمانك الدوائي.'
-          : 'Welcome! I am Nurse Shahd El-Sayed Hashem on SALUS. Ask by voice or text about your medications, potential adverse effects, or symptoms.',
+          ? 'أهلاً بك، أنا د. سمر السيد محمد هاشم، طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر في منصة سالوس. تقدر تسألني بصوتك أو كتابة عن أي دواء من الأدوية الموثقة أو أي أثر جانبي حاسس بيه لمساعدتك في أمانك الدوائي.'
+          : 'Welcome! I am Dr. Samar Alsayed Mohamed Hashem, Clinical Pharmacist verified by the General Syndicate of Egyptian Pharmacists on SALUS. Ask by voice or text about your medications, potential adverse effects, or symptoms.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -180,12 +180,14 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({ isOpen
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-bold text-base">
-                  {language === 'ar' ? 'الممرضة الذكية: شهد السيد هاشم' : 'Nurse Shahd El-Sayed Hashem'}
+                  {language === 'ar' ? 'د. سمر السيد محمد هاشم' : 'Dr. Samar Alsayed Mohamed Hashem'}
                 </h3>
-                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">تمريض إكلينيكي</span>
+                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">
+                  {language === 'ar' ? 'صيدلية إكلينيكية' : 'Clinical Pharmacist'}
+                </span>
               </div>
               <p className="text-xs text-salus-light-mint/80">
-                {language === 'ar' ? 'المساعد التمريضي لسلامة الأدوية ومتابعة الأعراض (بالعامية المصرية)' : 'Evidence-Backed Clinical Nursing Guide'}
+                {language === 'ar' ? 'طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر (بالعامية المصرية)' : 'Clinical Pharmacist - General Syndicate of Egyptian Pharmacists'}
               </p>
             </div>
           </div>
@@ -295,6 +297,42 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({ isOpen
 
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Live Audio Visualizer Banner for Listening / Speaking */}
+        {isListening && (
+          <div className="px-4 py-2 bg-rose-50 border-t border-rose-200 flex items-center justify-between text-xs text-rose-800 animate-fade-in">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping" />
+              <span className="font-bold">
+                {language === 'ar' ? 'جارٍ الاستماع بالعامية المصرية... تحدث الآن' : 'Listening in Egyptian Arabic... speak now'}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 h-5">
+              <span className="w-1 bg-rose-500 rounded-full soundwave-bar" style={{ animationDelay: '0.1s' }} />
+              <span className="w-1 bg-rose-600 rounded-full soundwave-bar" style={{ animationDelay: '0.3s' }} />
+              <span className="w-1 bg-rose-400 rounded-full soundwave-bar" style={{ animationDelay: '0.2s' }} />
+              <span className="w-1 bg-rose-600 rounded-full soundwave-bar" style={{ animationDelay: '0.4s' }} />
+              <span className="w-1 bg-rose-500 rounded-full soundwave-bar" style={{ animationDelay: '0.25s' }} />
+            </div>
+          </div>
+        )}
+
+        {isSpeaking && (
+          <div className="px-4 py-2 bg-emerald-50 border-t border-emerald-200 flex items-center justify-between text-xs text-emerald-800 animate-fade-in">
+            <div className="flex items-center gap-2">
+              <Volume2 className="w-4 h-4 text-emerald-600 animate-pulse" />
+              <span className="font-bold">
+                {language === 'ar' ? 'د. سمر تجيبك صوتياً الآن...' : 'Dr. Samar is speaking now...'}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 h-5">
+              <span className="w-1 bg-emerald-500 rounded-full soundwave-bar" style={{ animationDelay: '0.15s' }} />
+              <span className="w-1 bg-emerald-600 rounded-full soundwave-bar" style={{ animationDelay: '0.35s' }} />
+              <span className="w-1 bg-emerald-400 rounded-full soundwave-bar" style={{ animationDelay: '0.2s' }} />
+              <span className="w-1 bg-emerald-600 rounded-full soundwave-bar" style={{ animationDelay: '0.45s' }} />
+            </div>
+          </div>
+        )}
 
         {/* Input Bar with Big Microphone Button */}
         <div className="p-4 bg-salus-bg border-t border-gray-100 flex items-center gap-2 sm:gap-3">

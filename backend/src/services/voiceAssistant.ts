@@ -52,16 +52,16 @@ export function processAssistantQuery(query: string, lang: 'ar' | 'en' = 'ar'): 
     };
   }
 
-  // 1.5 Check for identity / nurse query
-  if (normalizedQuery.includes('مين انت') || normalizedQuery.includes('اسمك') || normalizedQuery.includes('الممرضة') || normalizedQuery.includes('nurse') || normalizedQuery.includes('شهد')) {
+  // 1.5 Check for identity / Dr. Samar query
+  if (normalizedQuery.includes('مين انت') || normalizedQuery.includes('اسمك') || normalizedQuery.includes('سمر') || normalizedQuery.includes('samar') || normalizedQuery.includes('الدكتورة') || normalizedQuery.includes('دكتورة') || normalizedQuery.includes('صيدلي') || normalizedQuery.includes('pharmacist') || normalizedQuery.includes('شهد')) {
     return {
-      answerTextEn: 'I am Nurse Shahd El-Sayed Hashem, your clinical nurse assistant at SALUS. I am here to guide you through your medications, explain potential adverse effects based on clinical trials, and help you connect with your doctor or pharmacist.',
-      answerTextAr: 'أنا الممرضة شهد السيد هاشم، المساعد التمريضي الإكلينيكي في منصة سالوس. أساعدك في فهم أدويتك وشرح الآثار الجانبية بناءً على الأدلة الطبية وتسهيل التواصل مع طبيبك أو صيدليك.',
+      answerTextEn: 'I am Dr. Samar Alsayed Mohamed Hashem, Clinical Pharmacist verified by the General Syndicate of Egyptian Pharmacists at SALUS. I am here to guide you through your medications, explain potential adverse effects based on clinical trials, and help you ensure maximum medication safety.',
+      answerTextAr: 'أنا د. سمر السيد محمد هاشم، طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر في منصة سالوس. أساعدك في فهم أدويتك وشرح الآثار الجانبية بناءً على الأدلة الطبية وتسهيل التواصل لضمان أعلى درجات الأمان الدوائي.',
       clarifyingQuestionsEn: ['Do you have questions about a specific medication or symptom?'],
       clarifyingQuestionsAr: ['هل لديك سؤال عن دواء معين أو عرض تشعر به؟'],
       pharmacistHandoffRecommended: false,
       mode: 'rag_structured_evidence',
-      sources: [{ title: 'SALUS Clinical Nursing Support Guide', type: 'Clinical Staff Protocol' }],
+      sources: [{ title: 'SALUS Clinical Pharmacy Protocol', type: 'Clinical Staff Protocol' }],
     };
   }
 

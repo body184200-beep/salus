@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Shield, Globe, User, LogOut, ChevronDown, HeartPulse, Stethoscope, AlertTriangle } from 'lucide-react';
+import { Shield, Globe, User, LogOut, ChevronDown, HeartPulse, Stethoscope, AlertTriangle, Mic, Sparkles } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext.js';
 import { useAuth } from '../context/AuthContext.js';
 
 interface NavbarProps {
   currentView: string;
   onNavigate: (view: string) => void;
+  onOpenAssistant?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenAssistant }) => {
   const { language, toggleLanguage, t, isRtl } = useLanguage();
   const {
     user,
@@ -89,6 +90,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
             >
               {t('navSearch')}
             </button>
+
+            {onOpenAssistant && (
+              <button
+                onClick={onOpenAssistant}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-salus-light-mint to-emerald-100 text-salus-dark-teal border border-salus-teal/30 hover:border-salus-teal text-xs font-bold transition-all shadow-sm group"
+                title={language === 'ar' ? 'استشر د. سمر السيد محمد هاشم' : 'Consult Dr. Samar Hashem'}
+              >
+                <div className="w-5 h-5 rounded-full bg-salus-teal text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Mic className="w-3 h-3" />
+                </div>
+                <span>{language === 'ar' ? 'اسأل د. سمر' : 'Ask Dr. Samar'}</span>
+              </button>
+            )}
           </div>
 
           {/* Right Action Tools: Language, Demo Selector, Auth */}
@@ -159,10 +173,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                     }}
                     className="w-full text-start px-3 py-2.5 hover:bg-emerald-50 flex items-center gap-2 text-salus-text font-semibold"
                   >
-                    <Shield className="w-4 h-4 text-emerald-600" />
+                    <HeartPulse className="w-4 h-4 text-emerald-600" />
                     <div>
                       <div>{t('demoNurse')}</div>
-                      <div className="text-[10px] text-emerald-700 font-normal">تمريض إكلينيكي ورعاية المرضى</div>
+                      <div className="text-[10px] text-emerald-700 font-normal">طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر</div>
                     </div>
                   </button>
                   <button

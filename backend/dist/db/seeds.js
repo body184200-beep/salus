@@ -19,17 +19,19 @@ export async function seedDatabase() {
   `);
     const existingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get();
     if (existingUsers && existingUsers.count > 0) {
-        // Ensure Nurse Shahd El-Sayed Hashem and Doctor Mohamed Tarek exist
-        const existingNurse = db.prepare('SELECT id FROM users WHERE email = ?').get('nurse@salus.eg');
-        if (!existingNurse) {
-            insertUser.run('usr-nurse-1', 'nurse@salus.eg', passwordHash, 'الممرضة: شهد السيد هاشم (Nurse Shahd El-Sayed Hashem)', 'nurse', 'ar', now, now);
-            insertPharmacistProfile.run('usr-nurse-1', 'شهد السيد هاشم - تمريض إكلينيكي ورعاية المرضى', 'EGY-NR-55421', 'مستشفى السلام الدولي - القاهرة', 'SYN-NR-4412', 'verified', now, 'EGY-MOH-VERIFIER');
+        // Ensure Dr. Samar Alsayed Mohamed Hashem and Doctor Mohamed Tarek exist
+        const existingSamar = db.prepare('SELECT id FROM users WHERE email = ?').get('samar@salus.eg');
+        if (!existingSamar) {
+            insertUser.run('usr-pharm-samar', 'samar@salus.eg', passwordHash, 'د. سمر السيد محمد هاشم (Dr. Samar Alsayed Mohamed Hashem)', 'pharmacist', 'ar', now, now);
+            insertPharmacistProfile.run('usr-pharm-samar', 'د. سمر السيد محمد هاشم - طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر', 'EGY-PH-55421', 'صيدلية السلام والمركز الإكلينيكي - القاهرة', 'SYN-PH-7741', 'verified', now, 'EGY-MOH-VERIFIER');
         }
         const existingDoctor = db.prepare('SELECT id FROM users WHERE email = ?').get('doctor@salus.eg');
         if (!existingDoctor) {
             insertUser.run('usr-doc-1', 'doctor@salus.eg', passwordHash, 'د. محمد طارق (Dr. Mohamed Tarek)', 'doctor', 'ar', now, now);
             insertPharmacistProfile.run('usr-doc-1', 'د. محمد طارق - استشاري باطنة وقلب', 'EGY-MD-10293', 'عيادات النيل التخصصية - المعادي', 'SYN-MD-8821', 'verified', now, 'EGY-MOH-VERIFIER');
         }
+        // Ensure any existing demo email is updated to Dr. Samar
+        db.prepare("UPDATE users SET display_name = 'د. سمر السيد محمد هاشم (Dr. Samar Alsayed Mohamed Hashem)', role = 'pharmacist' WHERE email IN ('samar@salus.eg', 'shahd@salus.eg', 'nurse@salus.eg')").run();
         return;
     }
     // Demo Patient: Ahmed Hassan
@@ -38,9 +40,14 @@ export async function seedDatabase() {
     // Demo Doctor: Dr. Mohamed Tarek
     insertUser.run('usr-doc-1', 'doctor@salus.eg', passwordHash, 'د. محمد طارق (Dr. Mohamed Tarek)', 'doctor', 'ar', now, now);
     insertPharmacistProfile.run('usr-doc-1', 'د. محمد طارق - استشاري باطنة وقلب', 'EGY-MD-10293', 'عيادات النيل التخصصية - المعادي', 'SYN-MD-8821', 'verified', now, 'EGY-MOH-VERIFIER');
-    // Demo Nurse: Shahd El-Sayed Hashem (الممرضة: شهد السيد هاشم)
-    insertUser.run('usr-nurse-1', 'nurse@salus.eg', passwordHash, 'الممرضة: شهد السيد هاشم (Nurse Shahd El-Sayed Hashem)', 'nurse', 'ar', now, now);
-    insertPharmacistProfile.run('usr-nurse-1', 'شهد السيد هاشم - تمريض إكلينيكي ورعاية المرضى', 'EGY-NR-55421', 'مستشفى السلام الدولي - القاهرة', 'SYN-NR-4412', 'verified', now, 'EGY-MOH-VERIFIER');
+    // Demo Clinical Pharmacist: Dr. Samar Alsayed Mohamed Hashem (د. سمر السيد محمد هاشم)
+    insertUser.run('usr-pharm-samar', 'samar@salus.eg', passwordHash, 'د. سمر السيد محمد هاشم (Dr. Samar Alsayed Mohamed Hashem)', 'pharmacist', 'ar', now, now);
+    insertPharmacistProfile.run('usr-pharm-samar', 'د. سمر السيد محمد هاشم - طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر', 'EGY-PH-55421', 'صيدلية السلام والمركز الإكلينيكي - القاهرة', 'SYN-PH-7741', 'verified', now, 'EGY-MOH-VERIFIER');
+    // Backward compatibility aliases
+    insertUser.run('usr-doc-shahd', 'shahd@salus.eg', passwordHash, 'د. سمر السيد محمد هاشم (Dr. Samar Alsayed Mohamed Hashem)', 'pharmacist', 'ar', now, now);
+    insertPharmacistProfile.run('usr-doc-shahd', 'د. سمر السيد محمد هاشم - طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر', 'EGY-PH-55421-B', 'صيدلية السلام والمركز الإكلينيكي - القاهرة', 'SYN-PH-7741', 'verified', now, 'EGY-MOH-VERIFIER');
+    insertUser.run('usr-nurse-1', 'nurse@salus.eg', passwordHash, 'د. سمر السيد محمد هاشم (Dr. Samar Alsayed Mohamed Hashem)', 'pharmacist', 'ar', now, now);
+    insertPharmacistProfile.run('usr-nurse-1', 'د. سمر السيد محمد هاشم - طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر', 'EGY-PH-55421-C', 'صيدلية السلام والمركز الإكلينيكي - القاهرة', 'SYN-PH-7741', 'verified', now, 'EGY-MOH-VERIFIER');
     // Demo Verified Pharmacist: Dr. Mariam Farouk
     insertUser.run('usr-pharm-1', 'pharmacist@salus.eg', passwordHash, 'د. مريم فاروق (Dr. Mariam Farouk)', 'pharmacist', 'ar', now, now);
     insertPharmacistProfile.run('usr-pharm-1', 'د. مريم فاروق - صيدلي إكلينيكي', 'EGY-PH-84920', 'صيدلية النيل الحديثة - المعادي، القاهرة', 'SYN-44219', 'verified', now, 'EGY-MOH-VERIFIER');

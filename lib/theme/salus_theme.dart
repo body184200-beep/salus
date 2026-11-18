@@ -12,6 +12,35 @@ class SalusTheme {
   static const Color warningAmber = Color(0xFFFFF4E0);
   static const Color criticalRed = Color(0xFFB42318);
 
+  // Modern Gradients & Shadows
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primaryTeal, darkTeal],
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+  );
+
+  static const LinearGradient heroGradient = LinearGradient(
+    colors: [Color(0xFFEAF7F1), Color(0xFFF7FAF8)],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static final List<BoxShadow> cardShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.04),
+      blurRadius: 14,
+      offset: const Offset(0, 4),
+    ),
+  ];
+
+  static final List<BoxShadow> tealGlow = [
+    BoxShadow(
+      color: primaryTeal.withOpacity(0.25),
+      blurRadius: 16,
+      offset: const Offset(0, 6),
+    ),
+  ];
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,

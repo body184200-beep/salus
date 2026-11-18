@@ -27,14 +27,18 @@ class AppState extends ChangeNotifier {
     role: 'patient',
   );
 
-  // Nurse: Shahd El-Sayed Hashem (الممرضة شهد السيد هاشم)
-  static final AppUser demoNurse = AppUser(
-    id: 'usr-nurse-1',
-    email: 'nurse@salus.eg',
-    displayName: 'الممرضة: شهد السيد هاشم (Nurse Shahd)',
-    role: 'nurse',
+  // Clinical Pharmacist: Dr. Samar Alsayed Mohamed Hashem (د. سمر السيد محمد هاشم)
+  static final AppUser demoClinicalPharmacistSamar = AppUser(
+    id: 'usr-pharm-samar',
+    email: 'samar@salus.eg',
+    displayName: 'د. سمر السيد محمد هاشم (Dr. Samar Alsayed Mohamed Hashem)',
+    role: 'pharmacist',
     pharmacistVerificationStatus: 'verified',
   );
+
+  // Backward compatibility aliases
+  static AppUser get demoDoctorShahd => demoClinicalPharmacistSamar;
+  static AppUser get demoNurse => demoClinicalPharmacistSamar;
 
   // Doctor: Dr. Mohamed Tarek
   static final AppUser demoDoctor = AppUser(

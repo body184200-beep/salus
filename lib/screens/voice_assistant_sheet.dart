@@ -67,11 +67,11 @@ class _VoiceAssistantSheetState extends State<VoiceAssistantSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.isAr ? 'الممرضة الذكية: شهد السيد هاشم' : 'Nurse Shahd El-Sayed Hashem',
+                        widget.isAr ? 'د. سمر السيد محمد هاشم' : 'Dr. Samar Alsayed Mohamed Hashem',
                         style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: SalusTheme.darkTeal),
                       ),
                       Text(
-                        widget.isAr ? 'المساعد التمريضي لسلامة الأدوية ومتابعة الأعراض' : 'Clinical Nurse Assistant & Safety Guide',
+                        widget.isAr ? 'طبيبة صيدلية معتمدة من النقابة العامة لصيادلة مصر' : 'Clinical Pharmacist - Syndicate Verified',
                         style: const TextStyle(fontSize: 11, color: SalusTheme.secondaryText),
                       ),
                     ],
@@ -119,8 +119,8 @@ class _VoiceAssistantSheetState extends State<VoiceAssistantSheet> {
                         const SizedBox(height: 12),
                         Text(
                           widget.isAr
-                              ? 'أهلاً بك! أنا الممرضة شهد السيد هاشم.\nتفضل بالتحدث أو كتابة استفسارك لمساعدتك فوراً.'
-                              : 'Hello! I am Nurse Shahd El-Sayed Hashem.\nAsk your medication or symptom question to get instant evidence-backed answers.',
+                              ? 'أهلاً بك! أنا د. سمر السيد محمد هاشم، طبيبة صيدلية معتمدة.\nتفضل بالتحدث أو كتابة استفسارك لمساعدتك فوراً.'
+                              : 'Hello! I am Dr. Samar Alsayed Mohamed Hashem, Clinical Pharmacist.\nAsk your medication or symptom question to get instant evidence-backed answers.',
                           style: const TextStyle(color: SalusTheme.darkTeal, fontWeight: FontWeight.bold, fontSize: 13, height: 1.5),
                           textAlign: TextAlign.center,
                         ),
@@ -193,6 +193,40 @@ class _VoiceAssistantSheetState extends State<VoiceAssistantSheet> {
                     ],
                   ),
           ),
+
+          if (_isListening)
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.red.shade200),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        widget.isAr ? 'جارٍ الاستماع بالعامية المصرية...' : 'Listening in Egyptian Arabic...',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.red.shade900),
+                      ),
+                    ],
+                  ),
+                  const Icon(Icons.graphic_eq_rounded, color: Colors.red, size: 20),
+                ],
+              ),
+            ),
 
           // Microphone & text input bottom bar
           Row(
