@@ -170,15 +170,27 @@ export const PharmacistDashboard: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-bold bg-emerald-400 text-salus-dark-teal px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <span className={`text-xs font-bold ${user?.role === 'doctor' ? 'bg-blue-300' : 'bg-emerald-400'} text-salus-dark-teal px-2.5 py-0.5 rounded-full flex items-center gap-1`}>
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>{t('pharmVerifiedBadge')}</span>
+                <span>
+                  {user?.role === 'doctor'
+                    ? (language === 'ar' ? 'طبيب بشري معتمد' : 'Licensed Physician')
+                    : user?.role === 'nurse'
+                    ? (language === 'ar' ? 'هيئة التمريض المعتمدة' : 'Registered Nurse')
+                    : t('pharmVerifiedBadge')}
+                </span>
               </span>
-              <span className="text-xs text-salus-light-mint">نقابة صيادلة مصر: SYN-44219</span>
+              <span className="text-xs text-salus-light-mint">
+                {user?.role === 'doctor' ? 'نقابة أطباء مصر: مصرح سريرياً' : user?.role === 'nurse' ? 'كادر التمريض الإكلينيكي' : 'نقابة صيادلة مصر: SYN-44219'}
+              </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black">{user?.displayName || 'د. مريم فاروق - صيدلي إكلينيكي'}</h1>
             <p className="text-xs text-salus-light-mint/80">
-              صيدلية النيل الحديثة - المعادي، القاهرة • رخصة مزاولة المهنة: EGY-PH-84920
+              {user?.role === 'doctor'
+                ? 'بوابة متابعة الحالات السريرية وتقارير الأمان الدوائي للأطباء'
+                : user?.role === 'nurse'
+                ? 'مستشفى السلام الدولي • متابعة الأعراض والرعاية التمريضية'
+                : 'صيدلية النيل الحديثة - المعادي، القاهرة • رخصة مزاولة المهنة: EGY-PH-84920'}
             </p>
           </div>
         </div>

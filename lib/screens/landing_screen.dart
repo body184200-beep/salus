@@ -6,6 +6,7 @@ class LandingScreen extends StatelessWidget {
   final AppState state;
   final VoidCallback onGetStarted;
   final VoidCallback onPharmacistPortal;
+  final VoidCallback onDoctorRegister;
   final VoidCallback onSearchMeds;
 
   const LandingScreen({
@@ -13,6 +14,7 @@ class LandingScreen extends StatelessWidget {
     required this.state,
     required this.onGetStarted,
     required this.onPharmacistPortal,
+    required this.onDoctorRegister,
     required this.onSearchMeds,
   });
 
@@ -129,6 +131,20 @@ class LandingScreen extends StatelessWidget {
                       icon: const Icon(Icons.arrow_forward_rounded, size: 18),
                       label: Text(isAr ? 'ابدأ الآن (حساب مريض)' : 'Get Started (Patient)'),
                     ),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: SalusTheme.darkTeal,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      onPressed: onDoctorRegister,
+                      icon: const Icon(Icons.person_add_alt_1_rounded, size: 18),
+                      label: Text(
+                        isAr ? 'تسجيل دكتور (أي طبيب)' : 'Doctor Sign Up',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
                         foregroundColor: SalusTheme.darkTeal,
@@ -139,7 +155,7 @@ class LandingScreen extends StatelessWidget {
                       onPressed: onPharmacistPortal,
                       icon: const Icon(Icons.medical_services_outlined, size: 18),
                       label: Text(
-                        isAr ? 'أنا صيدلي' : "I'm a Pharmacist",
+                        isAr ? 'بوابة الصيدلي' : "Pharmacist Portal",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -179,11 +195,11 @@ class LandingScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 _buildStepCard(
                   step: '1',
-                  title: isAr ? 'ابحث أو امسح علبة الدواء' : 'Search or Scan Package',
+                  title: isAr ? 'اسأل الممرضة شهد أو امسح العبوة' : 'Ask Nurse Shahd or Scan Package',
                   desc: isAr
-                      ? 'استخدم الصوت، الكتابة، أو الكاميرا لمسح العبوة وتأكيد الدواء والتركيز.'
-                      : 'Use Egyptian voice, text search, or camera OCR with patient confirmation.',
-                  icon: Icons.search_rounded,
+                      ? 'استشر الممرضة شهد السيد هاشم بالصوت أو امسح العبوة وتأكد من الجرعة والتركيز.'
+                      : 'Consult Nurse Shahd El-Sayed Hashem by voice or use camera OCR with patient confirmation.',
+                  icon: Icons.support_agent_rounded,
                   color: SalusTheme.primaryTeal,
                 ),
                 const SizedBox(height: 12),

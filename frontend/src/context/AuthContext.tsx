@@ -4,7 +4,7 @@ export interface User {
   id: string;
   email: string;
   displayName: string;
-  role: 'patient' | 'pharmacist' | 'admin';
+  role: 'patient' | 'pharmacist' | 'doctor' | 'nurse' | 'admin';
   preferredLanguage: string;
   pharmacistVerificationStatus?: 'pending' | 'verified' | 'rejected';
 }
@@ -14,12 +14,16 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isPharmacist: boolean;
+  isDoctor: boolean;
+  isNurse: boolean;
   isVerifiedPharmacist: boolean;
   login: (token: string, user: User) => void;
   logout: () => void;
   loginAsDemoPatient: () => Promise<void>;
   loginAsDemoPharmacist: () => Promise<void>;
   loginAsDemoPendingPharmacist: () => Promise<void>;
+  loginAsDemoDoctor: () => Promise<void>;
+  loginAsDemoNurse: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -76,6 +80,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await loginWithCredentials('patient@salus.eg');
   };
 
+  const loginAsDemoDoctor = async () => {
+    await loginWithCredentials('doctor@salus.eg');
+  };
+
+  const loginAsDemoNurse = async () => {
+    await loginWithCredentials('nurse@salus.eg');
+  };
+
   const loginAsDemoPharmacist = async () => {
     await loginWithCredentials('pharmacist@salus.eg');
   };
@@ -86,7 +98,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const isAuthenticated = !!token && !!user;
   const isPharmacist = user?.role === 'pharmacist';
-  const isVerifiedPharmacist = isPharmacist && user?.pharmacistVerificationStatus === 'verified';
+  const isDoctor = user?.role === 'doctor';
+  const isNurse = user?.role === 'nurse';
+  const isVerifiedPharmacist = isDoctor || isNurse || (isPharmacist && user?.pharmacistVerificationStatus === 'verified');
 
   return (
     <AuthContext.Provider
@@ -95,10 +109,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         isAuthenticated,
         isPharmacist,
+        isDoctor,
+        isNurse,
         isVerifiedPharmacist,
         login,
         logout,
         loginAsDemoPatient,
+        loginAsDemoDoctor,
+        loginAsDemoNurse,
         loginAsDemoPharmacist,
         loginAsDemoPendingPharmacist,
       }}

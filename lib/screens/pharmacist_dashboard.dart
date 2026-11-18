@@ -115,13 +115,23 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(color: const Color(0xFF34D399), borderRadius: BorderRadius.circular(20)),
-                  child: const Row(
+                  decoration: BoxDecoration(
+                    color: user?.isDoctor == true ? const Color(0xFF60A5FA) : const Color(0xFF34D399),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.verified, size: 14, color: SalusTheme.darkTeal),
-                      SizedBox(width: 4),
-                      Text('صيدلي معتمد نقابياً • نقابة صيادلة مصر', style: TextStyle(color: SalusTheme.darkTeal, fontWeight: FontWeight.bold, fontSize: 10.5)),
+                      const Icon(Icons.verified, size: 14, color: SalusTheme.darkTeal),
+                      const SizedBox(width: 4),
+                      Text(
+                        user?.isDoctor == true
+                            ? 'طبيب بشري معتمد • نقابة أطباء مصر'
+                            : user?.isNurse == true
+                                ? 'هيئة التمريض المعتمدة • رعاية إكلينيكية'
+                                : 'صيدلي معتمد نقابياً • نقابة صيادلة مصر',
+                        style: const TextStyle(color: SalusTheme.darkTeal, fontWeight: FontWeight.bold, fontSize: 10.5),
+                      ),
                     ],
                   ),
                 ),
@@ -131,9 +141,13 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
                   style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: Colors.white),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'صيدلية النيل الحديثة - المعادي • رخصة مزاولة المهنة: EGY-PH-84920',
-                  style: TextStyle(fontSize: 11.5, color: Colors.white70),
+                Text(
+                  user?.isDoctor == true
+                      ? 'بوابة متابعة المرضى والتقارير الطبية والأمان الدوائي'
+                      : user?.isNurse == true
+                          ? 'مستشفى السلام الدولي • الممرضة المشرفة على رعاية ومتابعة الحالات'
+                          : 'صيدلية النيل الحديثة - المعادي • رخصة مزاولة المهنة: EGY-PH-84920',
+                  style: const TextStyle(fontSize: 11.5, color: Colors.white70),
                 ),
               ],
             ),

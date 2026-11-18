@@ -27,8 +27,8 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({ isOpen
       sender: 'assistant',
       text:
         language === 'ar'
-          ? 'أهلاً بك في سالوس. تقدر تسألني بصوتك أو كتابة عن أي دواء من الأدوية التسعة الموثقة أو الآثار الجانبية اللي حاسس بيها.'
-          : 'Welcome to SALUS voice assistant. Ask about your medications, potential adverse effects, or symptoms.',
+          ? 'أهلاً بك، أنا الممرضة شهد السيد هاشم في منصة سالوس. تقدر تسألني بصوتك أو كتابة عن أي دواء من الأدوية الموثقة أو أي أثر جانبي حاسس بيه لمساعدتك في أمانك الدوائي.'
+          : 'Welcome! I am Nurse Shahd El-Sayed Hashem on SALUS. Ask by voice or text about your medications, potential adverse effects, or symptoms.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -180,12 +180,12 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({ isOpen
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-bold text-base">
-                  {language === 'ar' ? 'مساعد سالوس الصوتي (باللهجة المصرية)' : 'SALUS Voice Assistant'}
+                  {language === 'ar' ? 'الممرضة الذكية: شهد السيد هاشم' : 'Nurse Shahd El-Sayed Hashem'}
                 </h3>
-                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">RAG Evidence</span>
+                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">تمريض إكلينيكي</span>
               </div>
               <p className="text-xs text-salus-light-mint/80">
-                {language === 'ar' ? 'مدعوم بالأدلة الطبية والنشرات المعتمدة' : 'Evidence-Backed Clinical Guidance'}
+                {language === 'ar' ? 'المساعد التمريضي لسلامة الأدوية ومتابعة الأعراض (بالعامية المصرية)' : 'Evidence-Backed Clinical Nursing Guide'}
               </p>
             </div>
           </div>

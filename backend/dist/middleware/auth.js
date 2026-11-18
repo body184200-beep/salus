@@ -50,11 +50,15 @@ export function requireRole(...allowedRoles) {
     };
 }
 export function requireVerifiedPharmacist(req, res, next) {
-    if (!req.user || req.user.role !== 'pharmacist') {
+    if (!req.user || !['pharmacist', 'doctor', 'nurse'].includes(req.user.role)) {
         return res.status(403).json({
-            error: 'Access restricted to licensed pharmacists',
-            errorAr: 'هذا القسم مخصص للصيادلة المرخصين فقط',
+            error: 'Access restricted to licensed medical practitioners and pharmacists',
+            errorAr: 'هذا القسم مخصص للأطباء والصيادلة وهيئة التمريض المرخصين فقط',
         });
+    }
+    // Any doctor or nurse has direct clinical access
+    if (req.user.role === 'doctor' || req.user.role === 'nurse') {
+        return next();
     }
     const profile = db.prepare('SELECT verification_status FROM pharmacist_profiles WHERE user_id = ?').get(req.user.id);
     if (!profile || profile.verification_status !== 'verified') {

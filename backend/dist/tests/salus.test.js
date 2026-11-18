@@ -50,6 +50,15 @@ test('SALUS Comprehensive Test Suite', async (t) => {
       WHERE u.email = ?
     `).get('pending.pharmacist@salus.eg');
         assert.equal(pendingPharm.verification_status, 'pending', 'Dr. Karim Zaki must be pending');
+        // Demo Nurse Shahd El-Sayed Hashem check
+        const nurse = db.prepare('SELECT * FROM users WHERE email = ?').get('nurse@salus.eg');
+        assert.ok(nurse, 'Demo Nurse Shahd must exist');
+        assert.equal(nurse.role, 'nurse');
+        assert.ok(nurse.display_name.includes('شهد السيد هاشم'), 'Nurse name must be Shahd El-Sayed Hashem');
+        // Demo Doctor check
+        const doctor = db.prepare('SELECT * FROM users WHERE email = ?').get('doctor@salus.eg');
+        assert.ok(doctor, 'Demo Doctor must exist');
+        assert.equal(doctor.role, 'doctor');
     });
     await t.test('3. Deterministic Safety Engine & Emergency Red Flags', () => {
         // Dyspnea / breathing difficulty in English

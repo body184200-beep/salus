@@ -27,8 +27,11 @@ export const translations = {
     logout: 'تسجيل الخروج',
     demoAccounts: 'حسابات تجريبية سريعة',
     demoPatient: 'مريض: أحمد حسن',
+    demoDoctor: 'طبيب معتمد: د. محمد طارق',
+    demoNurse: 'الممرضة: شهد السيد هاشم',
     demoPharmVerified: 'صيدلي مرخص: د. مريم فاروق',
     demoPharmPending: 'صيدلي قيد المراجعة: د. كريم زكي',
+    nurseShahdTitle: 'الممرضة الذكية: شهد السيد هاشم',
     
     // Safety & Philosophy
     criticalDisclaimerTitle: 'إخلاء مسؤولية طبي هام',
@@ -129,8 +132,11 @@ export const translations = {
     logout: 'Sign Out',
     demoAccounts: 'Quick Demo Accounts',
     demoPatient: 'Patient: Ahmed Hassan',
+    demoDoctor: 'Doctor: Dr. Mohamed Tarek',
+    demoNurse: 'Nurse: Shahd El-Sayed Hashem',
     demoPharmVerified: 'Verified Pharmacist: Dr. Mariam Farouk',
     demoPharmPending: 'Pending Pharmacist: Dr. Karim Zaki',
+    nurseShahdTitle: 'Smart Clinical Nurse: Shahd El-Sayed Hashem',
     
     // Safety & Philosophy
     criticalDisclaimerTitle: 'Critical Medical Disclaimer',

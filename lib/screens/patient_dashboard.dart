@@ -481,10 +481,10 @@ class _PatientDashboardState extends State<PatientDashboard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('إنشاء كود مشاركة للصيدلي', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: SalusTheme.darkTeal)),
+                    const Text('إنشاء كود مشاركة للطبيب أو الصيدلي', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: SalusTheme.darkTeal)),
                     const SizedBox(height: 6),
                     const Text(
-                      'أنشئ كوداً مشفراً مؤقتاً وأعطه للصيدلي ليتمكن من مراجعة سجل أعراضك بأمان. يمكنك إلغاء الصلاحية فوراً في أي وقت.',
+                      'أنشئ كوداً مشفراً مؤقتاً وأعطه لطبيبك أو صيدليك ليتمكن من مراجعة سجل أعراضك بأمان. يمكنك إلغاء الصلاحية فوراً في أي وقت.',
                       style: TextStyle(fontSize: 12, color: SalusTheme.secondaryText, height: 1.4),
                     ),
                     const SizedBox(height: 12),

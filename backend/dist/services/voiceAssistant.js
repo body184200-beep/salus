@@ -16,6 +16,18 @@ export function processAssistantQuery(query, lang = 'ar') {
             sources: [{ title: 'Emergency Triage Protocol (Egypt MOH / 123)', type: 'Clinical Safety Rule' }],
         };
     }
+    // 1.5 Check for identity / nurse query
+    if (normalizedQuery.includes('مين انت') || normalizedQuery.includes('اسمك') || normalizedQuery.includes('الممرضة') || normalizedQuery.includes('nurse') || normalizedQuery.includes('شهد')) {
+        return {
+            answerTextEn: 'I am Nurse Shahd El-Sayed Hashem, your clinical nurse assistant at SALUS. I am here to guide you through your medications, explain potential adverse effects based on clinical trials, and help you connect with your doctor or pharmacist.',
+            answerTextAr: 'أنا الممرضة شهد السيد هاشم، المساعد التمريضي الإكلينيكي في منصة سالوس. أساعدك في فهم أدويتك وشرح الآثار الجانبية بناءً على الأدلة الطبية وتسهيل التواصل مع طبيبك أو صيدليك.',
+            clarifyingQuestionsEn: ['Do you have questions about a specific medication or symptom?'],
+            clarifyingQuestionsAr: ['هل لديك سؤال عن دواء معين أو عرض تشعر به؟'],
+            pharmacistHandoffRecommended: false,
+            mode: 'rag_structured_evidence',
+            sources: [{ title: 'SALUS Clinical Nursing Support Guide', type: 'Clinical Staff Protocol' }],
+        };
+    }
     // 2. Identify Medication from query (among the 9 active ingredients or Egyptian brands)
     const allIngredients = db.prepare('SELECT * FROM active_ingredients').all();
     const allProducts = db.prepare('SELECT p.*, a.name_en as active_name_en, a.name_ar as active_name_ar FROM medication_products p JOIN active_ingredients a ON p.active_ingredient_id = a.id').all();

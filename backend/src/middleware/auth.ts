@@ -6,7 +6,7 @@ import { db } from '../db/database.js';
 export interface AuthUser {
   id: string;
   email: string;
-  role: 'patient' | 'pharmacist' | 'admin';
+  role: 'patient' | 'pharmacist' | 'doctor' | 'nurse' | 'admin';
   displayName: string;
   preferredLanguage: string;
 }
@@ -57,7 +57,7 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
   }
 }
 
-export function requireRole(...allowedRoles: Array<'patient' | 'pharmacist' | 'admin'>) {
+export function requireRole(...allowedRoles: Array<'patient' | 'pharmacist' | 'doctor' | 'nurse' | 'admin'>) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({ error: 'Unauthorized', errorAr: 'غير مصرح بالدخول' });
@@ -75,11 +75,16 @@ export function requireRole(...allowedRoles: Array<'patient' | 'pharmacist' | 'a
 }
 
 export function requireVerifiedPharmacist(req: Request, res: Response, next: NextFunction) {
-  if (!req.user || req.user.role !== 'pharmacist') {
+  if (!req.user || !['pharmacist', 'doctor', 'nurse'].includes(req.user.role)) {
     return res.status(403).json({
-      error: 'Access restricted to licensed pharmacists',
-      errorAr: 'هذا القسم مخصص للصيادلة المرخصين فقط',
+      error: 'Access restricted to licensed medical practitioners and pharmacists',
+      errorAr: 'هذا القسم مخصص للأطباء والصيادلة وهيئة التمريض المرخصين فقط',
     });
+  }
+
+  // Any doctor or nurse has direct clinical access
+  if (req.user.role === 'doctor' || req.user.role === 'nurse') {
+    return next();
   }
 
   const profile = db.prepare('SELECT verification_status FROM pharmacist_profiles WHERE user_id = ?').get(req.user.id) as any;

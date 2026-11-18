@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, User, Stethoscope, Lock, Mail, Building2, Award, CheckCircle, AlertCircle } from 'lucide-react';
+import { Shield, User, Stethoscope, Lock, Mail, Building2, Award, CheckCircle, AlertCircle, HeartPulse, UserCheck } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext.js';
 import { useAuth } from '../context/AuthContext.js';
 import { api } from '../services/api.js';
@@ -10,10 +10,17 @@ interface AuthPageProps {
 
 export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
   const { language, t } = useLanguage();
-  const { login, loginAsDemoPatient, loginAsDemoPharmacist, loginAsDemoPendingPharmacist } = useAuth();
+  const {
+    login,
+    loginAsDemoPatient,
+    loginAsDemoDoctor,
+    loginAsDemoNurse,
+    loginAsDemoPharmacist,
+    loginAsDemoPendingPharmacist,
+  } = useAuth();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
-  const [role, setRole] = useState<'patient' | 'pharmacist'>('patient');
+  const [role, setRole] = useState<'patient' | 'doctor' | 'pharmacist' | 'nurse'>('patient');
 
   // Form State
   const [email, setEmail] = useState('');
@@ -24,6 +31,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
   const [licenseNumber, setLicenseNumber] = useState('');
   const [workplace, setWorkplace] = useState('');
   const [syndicateNumber, setSyndicateNumber] = useState('');
+  const [specialty, setSpecialty] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -40,7 +48,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         const res = await api.login(email, password);
         if (res.token) {
           login(res.token, res.user);
-          onSuccess(res.user.role);
+          onSuccess(res.user.role === 'patient' ? 'patient' : 'pharmacist');
         } else {
           setErrorMsg(language === 'ar' ? res.errorAr || res.error : res.error);
         }
@@ -49,7 +57,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         const payload: any = {
           email,
           password,
-          displayName,
+          displayName: (role === 'doctor' && !displayName.startsWith('د.')) ? `د. ${displayName}` : displayName,
           role,
           preferredLanguage: language,
         };
@@ -58,15 +66,16 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
           payload.ageRange = ageRange;
           payload.privacyConsent = privacyConsent;
         } else {
-          payload.licenseNumber = licenseNumber;
-          payload.workplace = workplace;
+          payload.licenseNumber = licenseNumber || (role === 'doctor' ? 'EGY-MD-REGISTERED' : 'EGY-PH-REGISTERED');
+          payload.workplace = workplace || (role === 'doctor' ? 'عيادة خاصة / مستشفى' : 'صيدلية');
           payload.syndicateNumber = syndicateNumber;
+          payload.specialty = specialty;
         }
 
         const res = await api.register(payload);
         if (res.token) {
           login(res.token, res.user);
-          onSuccess(res.user.role);
+          onSuccess(res.user.role === 'patient' ? 'patient' : 'pharmacist');
         } else {
           setErrorMsg(language === 'ar' ? res.errorAr || res.error : res.error);
         }
@@ -86,7 +95,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
           <Shield className="w-4 h-4 text-salus-teal" />
           <span>{language === 'ar' ? 'تسجيل دخول تجريبي فوري بنقرة واحدة:' : 'Instant One-Click Demo Sign In:'}</span>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
           <button
             onClick={async () => {
               await loginAsDemoPatient();
@@ -96,6 +105,26 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
           >
             <div className="text-xs font-bold text-salus-text">{t('demoPatient')}</div>
             <div className="text-[10px] text-salus-muted">أحمد حسن (مريض)</div>
+          </button>
+          <button
+            onClick={async () => {
+              await loginAsDemoDoctor();
+              onSuccess('pharmacist');
+            }}
+            className="p-2.5 bg-white rounded-xl border border-blue-300 hover:border-blue-600 text-start transition-all"
+          >
+            <div className="text-xs font-bold text-blue-800">{t('demoDoctor')}</div>
+            <div className="text-[10px] text-blue-600">طبيب معتمد سريرياً</div>
+          </button>
+          <button
+            onClick={async () => {
+              await loginAsDemoNurse();
+              onSuccess('pharmacist');
+            }}
+            className="p-2.5 bg-white rounded-xl border border-emerald-300 hover:border-emerald-600 text-start transition-all"
+          >
+            <div className="text-xs font-bold text-emerald-800">{t('demoNurse')}</div>
+            <div className="text-[10px] text-emerald-600">تمريض ورعاية إكلينيكية</div>
           </button>
           <button
             onClick={async () => {
@@ -146,30 +175,54 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
 
         {/* Role Toggle if Register */}
         {mode === 'register' && (
-          <div className="flex gap-3 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
             <button
               type="button"
               onClick={() => setRole('patient')}
-              className={`flex-1 p-3 rounded-2xl border-2 flex items-center justify-center gap-2 text-sm font-bold transition-all ${
+              className={`p-3 rounded-2xl border-2 flex flex-col items-center justify-center gap-1.5 text-xs font-bold transition-all ${
                 role === 'patient'
                   ? 'border-salus-teal bg-salus-light-mint text-salus-dark-teal'
                   : 'border-gray-200 text-salus-muted hover:border-gray-300'
               }`}
             >
               <User className="w-4 h-4" />
-              <span>{language === 'ar' ? 'حساب مريض' : 'Patient Account'}</span>
+              <span>{language === 'ar' ? 'حساب مريض' : 'Patient'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setRole('doctor')}
+              className={`p-3 rounded-2xl border-2 flex flex-col items-center justify-center gap-1.5 text-xs font-bold transition-all ${
+                role === 'doctor'
+                  ? 'border-blue-500 bg-blue-50 text-blue-900 shadow-sm'
+                  : 'border-gray-200 text-salus-muted hover:border-gray-300'
+              }`}
+            >
+              <HeartPulse className="w-4 h-4 text-blue-600" />
+              <span>{language === 'ar' ? 'حساب طبيب (دكتور)' : 'Doctor'}</span>
             </button>
             <button
               type="button"
               onClick={() => setRole('pharmacist')}
-              className={`flex-1 p-3 rounded-2xl border-2 flex items-center justify-center gap-2 text-sm font-bold transition-all ${
+              className={`p-3 rounded-2xl border-2 flex flex-col items-center justify-center gap-1.5 text-xs font-bold transition-all ${
                 role === 'pharmacist'
                   ? 'border-salus-teal bg-salus-light-mint text-salus-dark-teal'
                   : 'border-gray-200 text-salus-muted hover:border-gray-300'
               }`}
             >
               <Stethoscope className="w-4 h-4" />
-              <span>{language === 'ar' ? 'حساب صيدلي' : 'Pharmacist Account'}</span>
+              <span>{language === 'ar' ? 'حساب صيدلي' : 'Pharmacist'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setRole('nurse')}
+              className={`p-3 rounded-2xl border-2 flex flex-col items-center justify-center gap-1.5 text-xs font-bold transition-all ${
+                role === 'nurse'
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-900 shadow-sm'
+                  : 'border-gray-200 text-salus-muted hover:border-gray-300'
+              }`}
+            >
+              <UserCheck className="w-4 h-4 text-emerald-600" />
+              <span>{language === 'ar' ? 'هيئة التمريض' : 'Nurse'}</span>
             </button>
           </div>
         )}
@@ -266,6 +319,86 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
             </>
           )}
 
+          {/* Doctor specific fields */}
+          {mode === 'register' && role === 'doctor' && (
+            <>
+              <div>
+                <label className="block text-xs font-bold text-salus-text mb-1">
+                  {language === 'ar' ? 'التخصص الطبي' : 'Medical Specialty'}
+                </label>
+                <input
+                  type="text"
+                  value={specialty}
+                  onChange={(e) => setSpecialty(e.target.value)}
+                  placeholder={language === 'ar' ? 'أمراض الباطنة والقلب / طب الأسرة' : 'Internal Medicine / Family Medicine'}
+                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-salus-text mb-1">
+                  {language === 'ar' ? 'المستشفى أو العيادة' : 'Hospital / Clinic / Workplace'}
+                </label>
+                <input
+                  type="text"
+                  value={workplace}
+                  onChange={(e) => setWorkplace(e.target.value)}
+                  placeholder={language === 'ar' ? 'مستشفى قصر العيني / عيادة خاصة' : 'General Hospital / Private Clinic'}
+                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-salus-text mb-1">
+                  {language === 'ar' ? 'رقم ترخيص مزاولة المهنة (اختياري)' : 'Medical License Number (Optional)'}
+                </label>
+                <input
+                  type="text"
+                  value={licenseNumber}
+                  onChange={(e) => setLicenseNumber(e.target.value)}
+                  placeholder="EGY-MD-12345"
+                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
+                />
+              </div>
+
+              <div className="p-3.5 bg-blue-50 rounded-2xl border border-blue-200 text-[11px] text-blue-900 leading-relaxed flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-blue-600 shrink-0" />
+                <span>
+                  {language === 'ar'
+                    ? 'تفعيل فوري: يمكن لأي دكتور إنشاء حساب والوصول فوراً إلى لوحة المتابعة السريرية وسجلات المرضى.'
+                    : 'Instant Activation: Any doctor can create an account and immediately access the clinical monitoring portal.'}
+                </span>
+              </div>
+            </>
+          )}
+
+          {/* Nurse specific fields */}
+          {mode === 'register' && role === 'nurse' && (
+            <>
+              <div>
+                <label className="block text-xs font-bold text-salus-text mb-1">
+                  {language === 'ar' ? 'المستشفى أو قسم التمريض' : 'Hospital / Nursing Department'}
+                </label>
+                <input
+                  type="text"
+                  value={workplace}
+                  onChange={(e) => setWorkplace(e.target.value)}
+                  placeholder={language === 'ar' ? 'مستشفى السلام الدولي' : 'Hospital'}
+                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm"
+                />
+              </div>
+
+              <div className="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 text-[11px] text-emerald-900 leading-relaxed flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>
+                  {language === 'ar'
+                    ? 'تفعيل فوري: حساب التمريض مفعل مباشرة لرعاية المرضى ومتابعة الأعراض.'
+                    : 'Instant Activation: Nurse accounts are active immediately for patient follow-up.'}
+                </span>
+              </div>
+            </>
+          )}
+
           {/* Pharmacist specific fields */}
           {mode === 'register' && role === 'pharmacist' && (
             <>
@@ -275,7 +408,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
                 </label>
                 <input
                   type="text"
-                  required
                   value={licenseNumber}
                   onChange={(e) => setLicenseNumber(e.target.value)}
                   placeholder="EGY-PH-12345"
@@ -289,7 +421,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
                 </label>
                 <input
                   type="text"
-                  required
                   value={workplace}
                   onChange={(e) => setWorkplace(e.target.value)}
                   placeholder="صيدلية النيل - المعادي"
@@ -310,10 +441,13 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
                 />
               </div>
 
-              <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200 text-[11px] text-amber-900 leading-relaxed">
-                {language === 'ar'
-                  ? 'ملاحظة أمان: يبدأ حساب الصيدلي بحالة "قيد المراجعة" ولن تُمنح الصلاحيات المهنية والاطلاع على بيانات المرضى إلا بعد مراجعة بيانات ترخيص النقابة.'
-                  : 'Notice: Pharmacist accounts start in "Pending" status. Professional access is granted only after syndicate registration verification.'}
+              <div className="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 text-[11px] text-emerald-900 leading-relaxed flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>
+                  {language === 'ar'
+                    ? 'تفعيل فوري: يتم تفعيل حساب الصيدلي فوراً مع الصلاحيات السريرية الكاملة.'
+                    : 'Instant Activation: Pharmacist account is immediately activated with full clinical review features.'}
+                </span>
               </div>
             </>
           )}

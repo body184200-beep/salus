@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   display_name TEXT NOT NULL,
-  role TEXT NOT NULL CHECK(role IN ('patient', 'pharmacist', 'admin')),
+  role TEXT NOT NULL CHECK(role IN ('patient', 'pharmacist', 'doctor', 'nurse', 'admin')),
   preferred_language TEXT NOT NULL DEFAULT 'ar',
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL

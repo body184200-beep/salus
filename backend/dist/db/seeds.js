@@ -1,11 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { db } from './database.js';
 export async function seedDatabase() {
-    const existingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get();
-    if (existingUsers && existingUsers.count > 0) {
-        // Database already seeded
-        return;
-    }
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash('SalusDemo2026!', saltRounds);
     const now = new Date().toISOString();
@@ -22,9 +17,30 @@ export async function seedDatabase() {
     INSERT INTO pharmacist_profiles (user_id, full_name, license_number, workplace, syndicate_number, verification_status, verified_at, verified_by)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
+    const existingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get();
+    if (existingUsers && existingUsers.count > 0) {
+        // Ensure Nurse Shahd El-Sayed Hashem and Doctor Mohamed Tarek exist
+        const existingNurse = db.prepare('SELECT id FROM users WHERE email = ?').get('nurse@salus.eg');
+        if (!existingNurse) {
+            insertUser.run('usr-nurse-1', 'nurse@salus.eg', passwordHash, 'الممرضة: شهد السيد هاشم (Nurse Shahd El-Sayed Hashem)', 'nurse', 'ar', now, now);
+            insertPharmacistProfile.run('usr-nurse-1', 'شهد السيد هاشم - تمريض إكلينيكي ورعاية المرضى', 'EGY-NR-55421', 'مستشفى السلام الدولي - القاهرة', 'SYN-NR-4412', 'verified', now, 'EGY-MOH-VERIFIER');
+        }
+        const existingDoctor = db.prepare('SELECT id FROM users WHERE email = ?').get('doctor@salus.eg');
+        if (!existingDoctor) {
+            insertUser.run('usr-doc-1', 'doctor@salus.eg', passwordHash, 'د. محمد طارق (Dr. Mohamed Tarek)', 'doctor', 'ar', now, now);
+            insertPharmacistProfile.run('usr-doc-1', 'د. محمد طارق - استشاري باطنة وقلب', 'EGY-MD-10293', 'عيادات النيل التخصصية - المعادي', 'SYN-MD-8821', 'verified', now, 'EGY-MOH-VERIFIER');
+        }
+        return;
+    }
     // Demo Patient: Ahmed Hassan
     insertUser.run('usr-patient-1', 'patient@salus.eg', passwordHash, 'أحمد حسن (Ahmed Hassan)', 'patient', 'ar', now, now);
     insertPatientProfile.run('usr-patient-1', '50-64', 1, now, '01012345678 (Son)', 'Hypertension and Type 2 Diabetes history');
+    // Demo Doctor: Dr. Mohamed Tarek
+    insertUser.run('usr-doc-1', 'doctor@salus.eg', passwordHash, 'د. محمد طارق (Dr. Mohamed Tarek)', 'doctor', 'ar', now, now);
+    insertPharmacistProfile.run('usr-doc-1', 'د. محمد طارق - استشاري باطنة وقلب', 'EGY-MD-10293', 'عيادات النيل التخصصية - المعادي', 'SYN-MD-8821', 'verified', now, 'EGY-MOH-VERIFIER');
+    // Demo Nurse: Shahd El-Sayed Hashem (الممرضة: شهد السيد هاشم)
+    insertUser.run('usr-nurse-1', 'nurse@salus.eg', passwordHash, 'الممرضة: شهد السيد هاشم (Nurse Shahd El-Sayed Hashem)', 'nurse', 'ar', now, now);
+    insertPharmacistProfile.run('usr-nurse-1', 'شهد السيد هاشم - تمريض إكلينيكي ورعاية المرضى', 'EGY-NR-55421', 'مستشفى السلام الدولي - القاهرة', 'SYN-NR-4412', 'verified', now, 'EGY-MOH-VERIFIER');
     // Demo Verified Pharmacist: Dr. Mariam Farouk
     insertUser.run('usr-pharm-1', 'pharmacist@salus.eg', passwordHash, 'د. مريم فاروق (Dr. Mariam Farouk)', 'pharmacist', 'ar', now, now);
     insertPharmacistProfile.run('usr-pharm-1', 'د. مريم فاروق - صيدلي إكلينيكي', 'EGY-PH-84920', 'صيدلية النيل الحديثة - المعادي، القاهرة', 'SYN-44219', 'verified', now, 'EGY-MOH-VERIFIER');

@@ -10,7 +10,16 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const { language, toggleLanguage, t, isRtl } = useLanguage();
-  const { user, isAuthenticated, logout, loginAsDemoPatient, loginAsDemoPharmacist, loginAsDemoPendingPharmacist } = useAuth();
+  const {
+    user,
+    isAuthenticated,
+    logout,
+    loginAsDemoPatient,
+    loginAsDemoDoctor,
+    loginAsDemoNurse,
+    loginAsDemoPharmacist,
+    loginAsDemoPendingPharmacist,
+  } = useAuth();
   const [demoMenuOpen, setDemoMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -126,6 +135,34 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                     <div>
                       <div>{t('demoPatient')}</div>
                       <div className="text-[10px] text-salus-muted font-normal">أملوديبين + جلوكوفاج + سجل أعراض</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      loginAsDemoDoctor();
+                      setDemoMenuOpen(false);
+                      onNavigate('pharmacist');
+                    }}
+                    className="w-full text-start px-3 py-2.5 hover:bg-blue-50 flex items-center gap-2 text-salus-text font-semibold"
+                  >
+                    <HeartPulse className="w-4 h-4 text-blue-600" />
+                    <div>
+                      <div>{t('demoDoctor')}</div>
+                      <div className="text-[10px] text-blue-700 font-normal">طبيب بشري معتمد سريرياً</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      loginAsDemoNurse();
+                      setDemoMenuOpen(false);
+                      onNavigate('pharmacist');
+                    }}
+                    className="w-full text-start px-3 py-2.5 hover:bg-emerald-50 flex items-center gap-2 text-salus-text font-semibold"
+                  >
+                    <Shield className="w-4 h-4 text-emerald-600" />
+                    <div>
+                      <div>{t('demoNurse')}</div>
+                      <div className="text-[10px] text-emerald-700 font-normal">تمريض إكلينيكي ورعاية المرضى</div>
                     </div>
                   </button>
                   <button

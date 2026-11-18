@@ -36,6 +36,17 @@ class VoiceAssistantService {
       );
     }
 
+    // Nurse identity response
+    if (lower.contains('مين انت') || lower.contains('اسمك') || lower.contains('الممرضة') || lower.contains('شهد') || lower.contains('nurse')) {
+      return VoiceAssistantResponse(
+        answerAr: 'أنا الممرضة شهد السيد هاشم، المساعد التمريضي الإكلينيكي في منصة سالوس. أساعدك في فهم أدويتك وشرح الآثار الجانبية بناءً على الأدلة الطبية وتسهيل التواصل مع طبيبك أو صيدليك.',
+        answerEn: 'I am Nurse Shahd El-Sayed Hashem, your clinical nurse assistant on SALUS. I help you understand your medications and adverse effects based on clinical trials, and connect with your doctor or pharmacist.',
+        clarifyingQuestionsAr: ['هل تود الاستفسار عن أحد أدويتك أو عرض تشعر به؟'],
+        clarifyingQuestionsEn: ['Do you have questions about your prescribed medications or symptoms?'],
+        sourceTitle: 'SALUS Clinical Nursing Support Protocol',
+      );
+    }
+
     // 2. Amlodipine & Dizziness / Edema question (Core example in prompt)
     if (lower.contains('أملوديبين') || lower.contains('amlodipine') || lower.contains('نورفاسك') || lower.contains('norvasc')) {
       if (lower.contains('دوخة') || lower.contains('dizz') || lower.contains('دوار')) {

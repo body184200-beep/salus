@@ -13,6 +13,7 @@ import {
   ArrowRight,
   ArrowLeft,
   Heart,
+  HeartPulse,
   Scale,
   Brain,
   Layers,
@@ -27,7 +28,14 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const { t, language, isRtl } = useLanguage();
-  const { isAuthenticated, user, loginAsDemoPatient, loginAsDemoPharmacist } = useAuth();
+  const {
+    isAuthenticated,
+    user,
+    loginAsDemoPatient,
+    loginAsDemoDoctor,
+    loginAsDemoNurse,
+    loginAsDemoPharmacist,
+  } = useAuth();
 
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
@@ -60,17 +68,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg mx-auto">
             <button
               onClick={() => {
                 if (isAuthenticated) {
-                  onNavigate(user?.role === 'pharmacist' ? 'pharmacist' : 'patient');
+                  onNavigate(user?.role === 'patient' ? 'patient' : 'pharmacist');
                 } else {
                   loginAsDemoPatient();
                   onNavigate('patient');
                 }
               }}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-salus-teal text-white font-bold text-base shadow-xl shadow-salus-teal/30 hover:bg-salus-dark-teal transition-all flex items-center justify-center gap-2 group"
+              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-salus-teal text-white font-bold text-sm sm:text-base shadow-xl shadow-salus-teal/30 hover:bg-salus-dark-teal transition-all flex items-center justify-center gap-2 group"
             >
               <span>{t('getStarted')}</span>
               <ArrowIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -78,10 +86,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
             <button
               onClick={() => {
+                onNavigate('auth');
+              }}
+              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-salus-dark-teal text-white font-bold text-sm sm:text-base shadow-lg hover:bg-teal-900 transition-all flex items-center justify-center gap-2"
+            >
+              <HeartPulse className="w-5 h-5 text-salus-light-mint" />
+              <span>{language === 'ar' ? 'تسجيل دكتور (أي طبيب)' : 'Doctor Registration'}</span>
+            </button>
+
+            <button
+              onClick={() => {
                 loginAsDemoPharmacist();
                 onNavigate('pharmacist');
               }}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-salus-dark-teal border-2 border-salus-teal/30 font-bold text-base hover:bg-salus-light-mint/50 transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white text-salus-dark-teal border-2 border-salus-teal/30 font-bold text-sm sm:text-base hover:bg-salus-light-mint/50 transition-all flex items-center justify-center gap-2"
             >
               <UserCheck className="w-5 h-5 text-salus-teal" />
               <span>{t('imPharmacist')}</span>
@@ -120,12 +138,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               1
             </div>
             <h3 className="text-xl font-bold text-salus-dark-teal mb-3">
-              {language === 'ar' ? 'ابحث أو صوّر علبة الدواء' : 'Search or Scan Package'}
+              {language === 'ar' ? 'اسأل الممرضة شهد أو صوّر العبوة' : 'Ask Nurse Shahd or Scan Package'}
             </h3>
             <p className="text-salus-muted text-sm leading-relaxed">
               {language === 'ar'
-                ? 'استخدم الصوت، الكتابة، أو كاميرا الهاتف لمسح العبوة. سيتعرف سالوس على الدواء والتركيز ويطلب منك التأكيد لضمان الدقة.'
-                : 'Use Egyptian voice, text search, or your phone camera to scan packaging. Confirmed matching prevents mistaken drug identity.'}
+                ? 'استشر الممرضة شهد السيد هاشم بالصوت أو استخدم الكاميرا لمسح العبوة والتحقق الفوري من الجرعة والتركيز.'
+                : 'Consult Nurse Shahd El-Sayed Hashem by voice or use your camera to scan packaging with verified matching.'}
             </p>
           </div>
 
@@ -335,24 +353,42 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 ? 'استكشف أدويتك، سجّل أعراضك اليومية، وشارك سجلك بأمان تام مع الصيدلي.'
                 : 'Explore your medications, track daily adverse reactions, and collaborate securely with your licensed pharmacist.'}
             </p>
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => {
                   loginAsDemoPatient();
                   onNavigate('patient');
                 }}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-salus-teal text-white font-bold text-base hover:bg-emerald-600 shadow-xl transition-all"
+                className="px-6 py-3.5 rounded-2xl bg-salus-teal text-white font-bold text-sm hover:bg-emerald-600 shadow-xl transition-all"
               >
-                {language === 'ar' ? 'تجربة حساب المريض (أحمد حسن)' : 'Try Patient Experience (Ahmed Hassan)'}
+                {language === 'ar' ? 'حساب المريض (أحمد حسن)' : 'Patient (Ahmed Hassan)'}
+              </button>
+              <button
+                onClick={() => {
+                  loginAsDemoDoctor();
+                  onNavigate('pharmacist');
+                }}
+                className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-xl transition-all"
+              >
+                {language === 'ar' ? 'حساب الطبيب (د. محمد طارق)' : 'Doctor (Dr. Mohamed Tarek)'}
+              </button>
+              <button
+                onClick={() => {
+                  loginAsDemoNurse();
+                  onNavigate('pharmacist');
+                }}
+                className="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-xl transition-all"
+              >
+                {language === 'ar' ? 'الممرضة: شهد السيد هاشم' : 'Nurse: Shahd El-Sayed Hashem'}
               </button>
               <button
                 onClick={() => {
                   loginAsDemoPharmacist();
                   onNavigate('pharmacist');
                 }}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-base transition-all"
+                className="px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm transition-all"
               >
-                {language === 'ar' ? 'تجربة لوحة الصيدلي (د. مريم فاروق)' : 'Try Pharmacist Portal (Dr. Mariam Farouk)'}
+                {language === 'ar' ? 'لوحة الصيدلي (د. مريم فاروق)' : 'Pharmacist (Dr. Mariam Farouk)'}
               </button>
             </div>
           </div>

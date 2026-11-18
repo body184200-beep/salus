@@ -27,6 +27,24 @@ class AppState extends ChangeNotifier {
     role: 'patient',
   );
 
+  // Nurse: Shahd El-Sayed Hashem (الممرضة شهد السيد هاشم)
+  static final AppUser demoNurse = AppUser(
+    id: 'usr-nurse-1',
+    email: 'nurse@salus.eg',
+    displayName: 'الممرضة: شهد السيد هاشم (Nurse Shahd)',
+    role: 'nurse',
+    pharmacistVerificationStatus: 'verified',
+  );
+
+  // Doctor: Dr. Mohamed Tarek
+  static final AppUser demoDoctor = AppUser(
+    id: 'usr-doc-1',
+    email: 'doctor@salus.eg',
+    displayName: 'د. محمد طارق (Dr. Mohamed Tarek)',
+    role: 'doctor',
+    pharmacistVerificationStatus: 'verified',
+  );
+
   static final AppUser demoVerifiedPharmacist = AppUser(
     id: 'usr-pharm-1',
     email: 'pharmacist@salus.eg',
@@ -42,6 +60,29 @@ class AppState extends ChangeNotifier {
     role: 'pharmacist',
     pharmacistVerificationStatus: 'pending',
   );
+
+  final List<AppUser> _customDoctors = [];
+  List<AppUser> get customDoctors => _customDoctors;
+
+  // Allows any doctor to create an account immediately
+  AppUser registerDoctor({
+    required String name,
+    required String email,
+    String? specialty,
+    String? clinicOrHospital,
+  }) {
+    final cleanName = name.trim().startsWith('د.') ? name.trim() : 'د. ${name.trim()}';
+    final newDoctor = AppUser(
+      id: 'usr-doc-${DateTime.now().millisecondsSinceEpoch}',
+      email: email.trim(),
+      displayName: cleanName,
+      role: 'doctor',
+      pharmacistVerificationStatus: 'verified',
+    );
+    _customDoctors.add(newDoctor);
+    loginAs(newDoctor);
+    return newDoctor;
+  }
 
   // Current User
   AppUser? _currentUser;

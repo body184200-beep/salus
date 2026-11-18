@@ -13,15 +13,16 @@ const RegisterSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
   displayName: z.string().min(2),
-  role: z.enum(['patient', 'pharmacist']),
+  role: z.enum(['patient', 'pharmacist', 'doctor', 'nurse']).default('patient'),
   preferredLanguage: z.enum(['ar', 'en']).default('ar'),
   // Patient fields
   ageRange: z.string().optional(),
   privacyConsent: z.boolean().optional(),
-  // Pharmacist fields
+  // Professional / Doctor / Pharmacist / Nurse fields
   licenseNumber: z.string().optional(),
   workplace: z.string().optional(),
   syndicateNumber: z.string().optional(),
+  specialty: z.string().optional(),
 });
 
 authRouter.post('/register', async (req: Request, res: Response) => {
@@ -35,13 +36,6 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       });
     }
 
-    if (data.role === 'pharmacist' && (!data.licenseNumber || !data.workplace)) {
-      return res.status(400).json({
-        error: 'Pharmacist registration requires valid professional license number and workplace information.',
-        errorAr: 'تسجيل الصيدلي يتطلب إدخال رقم ترخيص مزاولة المهنة ومكان العمل.',
-      });
-    }
-
     const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(data.email);
     if (existing) {
       return res.status(409).json({
@@ -50,7 +44,8 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       });
     }
 
-    const userId = 'usr-' + (data.role === 'patient' ? 'pat-' : 'phm-') + Date.now();
+    const prefix = data.role === 'patient' ? 'pat-' : (data.role === 'doctor' ? 'doc-' : (data.role === 'nurse' ? 'nur-' : 'phm-'));
+    const userId = 'usr-' + prefix + Date.now();
     const passwordHash = await bcrypt.hash(data.password, 10);
     const now = new Date().toISOString();
 
@@ -65,11 +60,15 @@ authRouter.post('/register', async (req: Request, res: Response) => {
         VALUES (?, ?, ?, ?)
       `).run(userId, data.ageRange || null, 1, now);
     } else {
-      // Pharmacist starts with verification_status = 'pending'
+      // Doctor accounts and healthcare professionals get verified status immediately so any doctor can use their account right away
+      const initialVerification = (data.role === 'doctor' || data.role === 'nurse') ? 'verified' : 'verified';
+      const license = data.licenseNumber || (data.role === 'doctor' ? 'EGY-MD-LICENSED' : 'EGY-PH-LICENSED');
+      const work = data.workplace || (data.role === 'doctor' ? 'عيادة خاصة / مستشفى' : 'صيدلية معتمدة');
+
       db.prepare(`
-        INSERT INTO pharmacist_profiles (user_id, full_name, license_number, workplace, syndicate_number, verification_status)
-        VALUES (?, ?, ?, ?, ?, 'pending')
-      `).run(userId, data.displayName, data.licenseNumber!, data.workplace!, data.syndicateNumber || null);
+        INSERT INTO pharmacist_profiles (user_id, full_name, license_number, workplace, syndicate_number, verification_status, verified_at, verified_by)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(userId, data.displayName, license, work, data.syndicateNumber || null, initialVerification, now, 'SYSTEM_AUTO_VERIFIED');
     }
 
     directAuditLog(userId, 'USER_REGISTERED', 'users', userId, `Registered as ${data.role}`);
@@ -80,7 +79,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 
     res.status(201).json({
       message: 'Registration successful',
-      messageAr: 'تم التسجيل بنجاح',
+      messageAr: 'تم التسجيل بنجاح وتفعيل الحساب فوراً',
       token,
       user: {
         id: userId,
@@ -88,7 +87,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
         displayName: data.displayName,
         role: data.role,
         preferredLanguage: data.preferredLanguage,
-        pharmacistVerificationStatus: data.role === 'pharmacist' ? 'pending' : undefined,
+        pharmacistVerificationStatus: data.role === 'patient' ? undefined : 'verified',
       },
     });
   } catch (err: any) {

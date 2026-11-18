@@ -2,7 +2,7 @@ class AppUser {
   final String id;
   final String email;
   final String displayName;
-  final String role; // 'patient' or 'pharmacist'
+  final String role; // 'patient', 'pharmacist', 'doctor', 'nurse'
   final String? pharmacistVerificationStatus; // 'verified' or 'pending'
 
   AppUser({
@@ -14,7 +14,10 @@ class AppUser {
   });
 
   bool get isPharmacist => role == 'pharmacist';
-  bool get isVerifiedPharmacist => isPharmacist && pharmacistVerificationStatus == 'verified';
+  bool get isDoctor => role == 'doctor';
+  bool get isNurse => role == 'nurse';
+  bool get isMedicalProfessional => role == 'pharmacist' || role == 'doctor' || role == 'nurse';
+  bool get isVerifiedPharmacist => isDoctor || isNurse || (isPharmacist && pharmacistVerificationStatus == 'verified');
 }
 
 class MedicationCategory {

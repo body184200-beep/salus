@@ -60,18 +60,18 @@ class _VoiceAssistantSheetState extends State<VoiceAssistantSheet> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(color: SalusTheme.lightMint, borderRadius: BorderRadius.circular(12)),
-                    child: const Icon(Icons.mic, color: SalusTheme.primaryTeal),
+                    child: const Icon(Icons.support_agent_rounded, color: SalusTheme.primaryTeal),
                   ),
                   const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.isAr ? 'المساعد الصوتي (بالعامية المصرية)' : 'Voice Assistant (Egyptian Arabic)',
+                        widget.isAr ? 'الممرضة الذكية: شهد السيد هاشم' : 'Nurse Shahd El-Sayed Hashem',
                         style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: SalusTheme.darkTeal),
                       ),
                       Text(
-                        widget.isAr ? 'إجابات مبنية على الأدلة السريرية والنشرات' : 'Clinical Evidence Answering',
+                        widget.isAr ? 'المساعد التمريضي لسلامة الأدوية ومتابعة الأعراض' : 'Clinical Nurse Assistant & Safety Guide',
                         style: const TextStyle(fontSize: 11, color: SalusTheme.secondaryText),
                       ),
                     ],
@@ -108,11 +108,26 @@ class _VoiceAssistantSheetState extends State<VoiceAssistantSheet> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.record_voice_over_outlined, size: 54, color: SalusTheme.primaryTeal.withOpacity(0.4)),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: SalusTheme.lightMint,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.support_agent_rounded, size: 48, color: SalusTheme.primaryTeal),
+                        ),
                         const SizedBox(height: 12),
                         Text(
-                          widget.isAr ? 'اضغط على الميكروفون للتحدث أو اختر سؤالاً أعلاه' : 'Press microphone or select a sample question above',
-                          style: const TextStyle(color: SalusTheme.secondaryText, fontSize: 13),
+                          widget.isAr
+                              ? 'أهلاً بك! أنا الممرضة شهد السيد هاشم.\nتفضل بالتحدث أو كتابة استفسارك لمساعدتك فوراً.'
+                              : 'Hello! I am Nurse Shahd El-Sayed Hashem.\nAsk your medication or symptom question to get instant evidence-backed answers.',
+                          style: const TextStyle(color: SalusTheme.darkTeal, fontWeight: FontWeight.bold, fontSize: 13, height: 1.5),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          widget.isAr ? 'اضغط على الميكروفون للتحدث أو اختر سؤالاً من الأعلى' : 'Press microphone or select a sample question above',
+                          style: const TextStyle(color: SalusTheme.secondaryText, fontSize: 11),
                           textAlign: TextAlign.center,
                         ),
                       ],
